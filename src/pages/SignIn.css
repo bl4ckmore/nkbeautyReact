@@ -1,0 +1,225 @@
+.si-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100svh;
+}
+
+/* LEFT PANEL */
+.si-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.si-panel-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 8s ease;
+}
+
+.si-panel:hover .si-panel-bg { transform: scale(1.04); }
+
+.si-panel-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(7,5,4,0.4) 0%, rgba(7,5,4,0.75) 100%);
+}
+
+.si-panel-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem;
+}
+
+.si-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--cream);
+  letter-spacing: 0.05em;
+}
+
+.si-logo span { color: var(--gold); }
+
+.si-panel-quote p {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1.4;
+}
+
+.si-panel-quote em { color: var(--gold); }
+
+.si-panel-badges {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.si-panel-badges span {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(240,230,210,0.5);
+  border: 1px solid rgba(196,163,90,0.2);
+  padding: 0.4rem 0.85rem;
+}
+
+/* RIGHT: FORM SIDE */
+.si-form-side {
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+}
+
+.si-form-wrap {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.si-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(196,163,90,0.06);
+  border: 1px solid var(--border-warm);
+  padding: 0.875rem 1.25rem;
+  flex-wrap: wrap;
+}
+
+.si-notice strong {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--cream);
+  font-weight: 400;
+  flex: 1;
+}
+
+.si-notice-price {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--gold);
+}
+
+.si-form-wrap h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--cream);
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+.si-form-wrap > p {
+  font-size: 0.85rem;
+  color: var(--cream-dim);
+  margin-top: -0.75rem;
+}
+
+/* TOGGLE */
+.si-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  height: 44px;
+}
+
+.si-toggle button {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  transition: color 0.3s;
+  position: relative;
+  z-index: 1;
+}
+
+.si-toggle button.act { color: var(--black); }
+
+.si-toggle-indicator {
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%; height: 100%;
+  background: var(--gold);
+  transition: transform 0.35s var(--ease);
+  z-index: 0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.si-err {
+  font-size: 0.78rem;
+  color: #c87070;
+  background: rgba(200,112,112,0.08);
+  border: 1px solid rgba(200,112,112,0.2);
+  padding: 0.75rem 1rem;
+}
+
+.si-submit {
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+.si-submit:disabled { opacity: 0.6; }
+
+.si-forgot {
+  font-size: 0.75rem;
+  color: var(--cream-dim);
+  align-self: flex-end;
+  transition: color 0.25s;
+  margin-top: -0.75rem;
+}
+
+.si-forgot:hover { color: var(--gold); }
+
+.si-switch {
+  font-size: 0.82rem;
+  color: var(--cream-dim);
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.si-switch button {
+  color: var(--gold);
+  font-size: 0.82rem;
+  margin-left: 0.25rem;
+  transition: opacity 0.25s;
+}
+
+.si-switch button:hover { opacity: 0.75; text-decoration: underline; }
+
+.si-back {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(240,230,210,0.25);
+  text-align: center;
+  transition: color 0.25s;
+}
+
+.si-back:hover { color: var(--cream-dim); }
+
+@media (max-width: 768px) {
+  .si-page { grid-template-columns: 1fr; }
+  .si-panel { display: none; }
+  .si-form-side { min-height: 100svh; }
+}

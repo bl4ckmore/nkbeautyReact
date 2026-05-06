@@ -1,0 +1,48 @@
+.ord-modal {
+  max-width: 640px !important;
+}
+
+.om-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.om-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  color: var(--cream);
+  font-weight: 300;
+}
+
+.om-close {
+  width: 32px; height: 32px;
+  border: 1px solid var(--border);
+  color: var(--cream-dim);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+}
+
+.om-close:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+.om-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.om-footer {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 480px) {
+  .om-row { grid-template-columns: 1fr; }
+}

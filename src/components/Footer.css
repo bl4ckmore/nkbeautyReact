@@ -1,0 +1,127 @@
+.footer {
+  background: var(--dark);
+  border-top: 1px solid var(--border);
+  padding: 5rem 0 2.5rem;
+}
+
+.footer-inner {}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.6fr 2fr;
+  gap: 5rem;
+  padding-bottom: 4rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.footer-brand {}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--cream);
+  margin-bottom: 1.25rem;
+}
+
+.fl-mark { color: var(--gold); margin-right: 0.25rem; }
+
+.footer-brand p {
+  font-size: 0.82rem;
+  color: rgba(240,230,210,0.4);
+  line-height: 1.8;
+  max-width: 300px;
+  margin-bottom: 1.5rem;
+}
+
+.footer-social {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.footer-social a {
+  width: 34px; height: 34px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cream-dim);
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.footer-social a:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+.footer-nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.fn-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.fn-col h5 {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-family: var(--font-body);
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.fn-col a,
+.fn-col span {
+  font-size: 0.82rem;
+  color: rgba(240,230,210,0.4);
+  transition: color 0.25s;
+}
+
+.fn-col a:hover { color: var(--cream); }
+
+.fn-sep { height: 1px; background: var(--border); margin: 0.3rem 0; }
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-bottom span {
+  font-size: 0.72rem;
+  color: rgba(240,230,210,0.25);
+  letter-spacing: 0.08em;
+}
+
+.fb-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.fb-links a {
+  font-size: 0.72rem;
+  color: rgba(240,230,210,0.25);
+  transition: color 0.25s;
+}
+
+.fb-links a:hover { color: var(--cream-dim); }
+
+@media (max-width: 900px) {
+  .footer-top { grid-template-columns: 1fr; gap: 3rem; }
+}
+
+@media (max-width: 560px) {
+  .footer-nav { grid-template-columns: 1fr 1fr; }
+}

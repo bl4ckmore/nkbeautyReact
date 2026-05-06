@@ -1,0 +1,63 @@
+/* GLOW — large soft blob, very slow */
+.cur-glow {
+  position: fixed;
+  top: 0; left: 0;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196,163,90,0.18) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 99996;
+  will-change: transform;
+  filter: blur(8px);
+  transition: opacity 0.4s, width 0.5s, height 0.5s;
+}
+
+.cur-glow.hover {
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(196,163,90,0.28) 0%, transparent 70%);
+  margin: -30px 0 0 -30px;
+}
+
+/* RING — sharp circle, medium lag */
+.cur-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(196,163,90,0.7);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  will-change: transform;
+  transition: width 0.35s ease, height 0.35s ease,
+              border-color 0.3s, background 0.3s, margin 0.35s ease;
+}
+
+.cur-ring.hover {
+  width: 48px; height: 48px;
+  margin: -8px 0 0 -8px;
+  border-color: rgba(196,163,90,1);
+  background: rgba(196,163,90,0.05);
+}
+
+.cur-ring.press {
+  width: 22px; height: 22px;
+  margin: 5px 0 0 5px;
+  background: rgba(196,163,90,0.15);
+}
+
+/* DOT — sharp, instant */
+.cur-dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 4px; height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform;
+}
+
+@media (pointer: coarse) {
+  .cur-glow, .cur-ring, .cur-dot { display: none; }
+  body, *, a, button, input, select, textarea, label { cursor: auto !important; }
+}

@@ -1,0 +1,205 @@
+.ord-loading {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.ord-spinner {
+  width: 36px; height: 36px;
+  border: 1px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.ord-loading p { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-dim); }
+
+/* HEADER */
+.ord-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8rem 0 3rem;
+  margin-bottom: 2rem;
+}
+
+.ord-header-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.ord-header .eyebrow { margin-bottom: 0.5rem; }
+
+.ord-header h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  color: var(--cream);
+  font-weight: 300;
+  line-height: 1;
+}
+
+.ord-stats {
+  display: flex;
+  gap: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.ord-stat { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.os-num {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.os-lbl {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(240,230,210,0.3);
+}
+
+/* FILTERS */
+.ord-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 1.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+/* TABLE */
+.ord-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 4rem;
+  border: 1px solid var(--border);
+}
+
+.ord-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.ord-table thead tr {
+  border-bottom: 1px solid var(--border);
+}
+
+.ord-table th {
+  text-align: left;
+  padding: 1.1rem 1.5rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(240,230,210,0.3);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.ord-table td {
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--cream-dim);
+  vertical-align: middle;
+}
+
+.ord-table tbody tr {
+  transition: background 0.2s;
+}
+
+.ord-table tbody tr:hover { background: var(--surface); }
+
+.ord-table tbody tr:last-child td { border-bottom: none; }
+
+.ord-table code {
+  font-size: 0.7rem;
+  color: rgba(240,230,210,0.3);
+  font-family: monospace;
+}
+
+.td-client {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.td-av {
+  width: 30px; height: 30px;
+  background: rgba(196,163,90,0.1);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.td-service { color: var(--cream); }
+
+.td-date { display: flex; flex-direction: column; gap: 0.15rem; }
+.td-time { font-size: 0.75rem; color: rgba(240,230,210,0.3); }
+
+.td-price {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--gold);
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sc);
+  border: 1px solid var(--sc);
+  background: rgba(from var(--sc) r g b / 0.08);
+}
+
+.td-actions { display: flex; gap: 0.5rem; }
+
+.ta-btn {
+  width: 30px; height: 30px;
+  border: 1px solid var(--border);
+  color: rgba(240,230,210,0.35);
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+}
+
+.ta-btn.edit:hover { border-color: var(--gold-dim); color: var(--gold); background: rgba(196,163,90,0.06); }
+.ta-btn.del:hover  { border-color: rgba(200,112,112,0.4); color: #c87070; background: rgba(200,112,112,0.06); }
+
+/* EMPTY */
+.ord-empty {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  text-align: center;
+  padding: 4rem;
+}
+
+.oe-icon { font-size: 3rem; color: var(--gold-dim); }
+.ord-empty h3 { font-size: 1.8rem; color: var(--cream); font-weight: 300; }
+.ord-empty p  { font-size: 0.85rem; color: var(--cream-dim); }
+
+@media (max-width: 640px) {
+  .ord-stats { gap: 1.5rem; flex-wrap: wrap; }
+  .ord-header-top { align-items: flex-start; }
+}
