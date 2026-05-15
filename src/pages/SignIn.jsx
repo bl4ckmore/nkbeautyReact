@@ -44,7 +44,7 @@ export default function SignIn() {
         <div className="si-panel-overlay" />
         <div className="si-panel-content">
           <Link to="/" className="si-logo">
-            <span>✦</span> Lumière
+            <span>✦</span> NkBeauty
           </Link>
           <div className="si-panel-quote">
             <p>"Where beauty becomes<br /><em>an experience.</em>"</p>
@@ -67,7 +67,7 @@ export default function SignIn() {
             </div>
           )}
 
-          <h1>{mode === 'in' ? 'Welcome back.' : 'Join Lumière.'}</h1>
+          <h1>{mode === 'in' ? 'Welcome back.' : 'Join NkBeauty.'}</h1>
           <p>{mode === 'in' ? 'Sign in to manage your appointments.' : 'Create your account to book and track appointments.'}</p>
 
           {/* Toggle */}

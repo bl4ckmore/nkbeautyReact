@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useLang } from '../context/LanguageContext';
+import { T } from '../i18n/translations';
 import './Navbar.css';
 
 export default function Navbar({ onBook }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen]         = useState(false);
   const loc = useLocation();
+  const { lang, toggle } = useLang();
+  const t = T[lang];
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 60);
@@ -16,8 +20,8 @@ export default function Navbar({ onBook }) {
   useEffect(() => { setOpen(false); }, [loc.pathname]);
 
   const links = [
-    { to: '/',        label: 'Home'     },
-    { to: '/catalog', label: 'Services' },
+    { to: '/',        label: t.nav_home     },
+    { to: '/catalog', label: t.nav_services },
   ];
 
   return (
@@ -26,7 +30,7 @@ export default function Navbar({ onBook }) {
         <div className="nav-inner container-wide">
           <Link to="/" className="nav-logo">
             <span className="nav-logo-mark">✦</span>
-            Lumière
+            NkBeauty
           </Link>
 
           <ul className="nav-links">
@@ -40,7 +44,12 @@ export default function Navbar({ onBook }) {
           </ul>
 
           <div className="nav-right">
-            <button className="btn btn-gold" onClick={onBook}><span>Book Now</span></button>
+            <button className="lang-pill" onClick={toggle} aria-label="Switch language">
+              <span className={lang === 'en' ? 'lp-active' : ''}>EN</span>
+              <span className="lp-sep">|</span>
+              <span className={lang === 'ge' ? 'lp-active' : ''}>GE</span>
+            </button>
+            <button className="btn btn-gold" onClick={onBook}><span>{t.nav_book}</span></button>
           </div>
 
           <button className={`nav-burger ${open ? 'open' : ''}`} onClick={() => setOpen(!open)}>
@@ -51,12 +60,19 @@ export default function Navbar({ onBook }) {
 
       <div className={`nav-mobile ${open ? 'open' : ''}`}>
         <div className="nm-top">
-          <span className="nav-logo">✦ Lumière</span>
+          <span className="nav-logo">✦ NkBeauty</span>
           <button className="nm-close" onClick={() => setOpen(false)}>✕</button>
         </div>
         <nav className="nm-links">
           {links.map(l => <Link key={l.to} to={l.to}>{l.label}</Link>)}
-          <button onClick={() => { setOpen(false); onBook(); }}>Book Appointment</button>
+          <button className="nm-book" onClick={() => { setOpen(false); onBook(); }}>{t.nav_book}</button>
+          <div className="nm-lang">
+            <button className="lang-pill" onClick={toggle} aria-label="Switch language">
+              <span className={lang === 'en' ? 'lp-active' : ''}>EN</span>
+              <span className="lp-sep">|</span>
+              <span className={lang === 'ge' ? 'lp-active' : ''}>GE</span>
+            </button>
+          </div>
         </nav>
       </div>
       {open && <div className="nav-shade" onClick={() => setOpen(false)} />}

@@ -2,6 +2,14 @@
    MAISON NOIR — Global Design System
    ═══════════════════════════════════════════════ */
 
+@font-face {
+  font-family: 'BPGNino';
+  src: url('/fonts/BPGNinoMtavruliB.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -22,8 +30,9 @@
   --white:       #ffffff;
 
   /* Typography */
-  --font-display: 'Bodoni Moda', Georgia, serif;
-  --font-body:    'DM Sans', sans-serif;
+  --font-display: 'Montserrat', 'Helvetica Neue', Helvetica, sans-serif;
+  --font-body:    'Raleway', 'Helvetica Neue', Helvetica, sans-serif;
+  --font-geo:     'BPGNino', sans-serif;
 
   /* Motion */
   --ease:        cubic-bezier(0.4, 0, 0.2, 1);
@@ -49,6 +58,9 @@ body {
   overflow-x: hidden;
   cursor: none;
 }
+
+/* Georgian font */
+:lang(ge), :lang(ge) * { font-family: var(--font-geo) !important; }
 
 /* Hide cursor on all interactive elements too */
 *, a, button, input, select, textarea, label { cursor: none !important; }

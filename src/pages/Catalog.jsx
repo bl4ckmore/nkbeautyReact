@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useReveal } from '../hooks/useReveal';
 import { getServices } from '../services/servicesService';
+import { SERVICES as FALLBACK } from '../services/catalogData';
+import { useLang } from '../context/LanguageContext';
+import { T } from '../i18n/translations';
 import './Catalog.css';
 
 const SERVICE_IMGS = {
@@ -20,38 +23,54 @@ const SERVICE_IMGS = {
 
 export default function Catalog({ onBook }) {
   const [services,   setServices]   = useState([]);
-  const [categories, setCategories] = useState(['All']);
-  const [active,     setActive]     = useState('All');
+  const [categories, setCategories] = useState([]);
+  const [active,     setActive]     = useState('all');
   const [loading,    setLoading]    = useState(true);
-  useReveal(0.1);
+  const { lang } = useLang();
+  const t = T[lang];
+  useReveal(0.1, [loading]);
 
   useEffect(() => {
     getServices().then(data => {
       setServices(data);
-      setCategories(['All', ...new Set(data.map(s => s.category))]);
-      setLoading(false);
-    }).catch(() => setLoading(false));
+      setCategories([...new Set(data.map(s => s.category))]);
+    }).catch(() => {
+      setServices(FALLBACK);
+      setCategories([...new Set(FALLBACK.map(s => s.category))]);
+    }).finally(() => setLoading(false));
   }, []);
 
-  const filtered = active === 'All' ? services : services.filter(s => s.category === active);
+  const filtered = active === 'all' ? services : services.filter(s => s.category === active);
 
   return (
     <div className="catalog page">
       <div className="cat-hero">
         <div className="cat-hero-bg" />
         <div className="container-wide">
-          <p className="eyebrow reveal">Treatment Menu</p>
+          <p className="eyebrow reveal">{t.cat_eyebrow}</p>
           <div className="rule reveal d1"><span className="rule-dot">✦</span></div>
-          <h1 className="reveal d2">Every Ritual.<br /><em>Perfected.</em></h1>
-          <p className="reveal d3">Expertly crafted treatments to celebrate every dimension of your beauty.</p>
+          <h1 className="reveal d2">{t.cat_h1a}<br /><em>{t.cat_h1b}</em></h1>
+          <p className="reveal d3">{t.cat_sub}</p>
         </div>
       </div>
 
       <div className="cat-filters-wrap">
         <div className="container-wide">
           <div className="cat-filters">
+            <button
+              className={`cf-btn ${active === 'all' ? 'active' : ''}`}
+              onClick={() => setActive('all')}
+            >
+              {t.cat_filter_all}
+            </button>
             {categories.map(c => (
-              <button key={c} className={`cf-btn ${active === c ? 'active' : ''}`} onClick={() => setActive(c)}>{c}</button>
+              <button
+                key={c}
+                className={`cf-btn ${active === c ? 'active' : ''}`}
+                onClick={() => setActive(c)}
+              >
+                {t.categories[c] || c}
+              </button>
             ))}
           </div>
         </div>
@@ -68,6 +87,7 @@ export default function Catalog({ onBook }) {
               <ServiceCard
                 key={s.id}
                 s={s}
+                t={t}
                 img={SERVICE_IMGS[s.name]}
                 delay={Math.min(i % 3, 2) + 1}
                 onBook={() => onBook(s)}
@@ -81,10 +101,12 @@ export default function Catalog({ onBook }) {
         <div className="container-wide">
           <div className="cat-bottom-inner">
             <div>
-              <h3>Not sure where to start?</h3>
-              <p>Our specialists will recommend the ideal treatment for your needs.</p>
+              <h3>{t.cat_help_h}</h3>
+              <p>{t.cat_help_p}</p>
             </div>
-            <a href="tel:+99532123456" className="btn btn-gold"><span>Call: +995 32 123 456</span><span>→</span></a>
+            <a href="tel:+99532123456" className="btn btn-gold">
+              <span>{t.cat_call}</span><span>→</span>
+            </a>
           </div>
         </div>
       </div>
@@ -92,7 +114,7 @@ export default function Catalog({ onBook }) {
   );
 }
 
-function ServiceCard({ s, img, delay, onBook }) {
+function ServiceCard({ s, t, img, delay, onBook }) {
   const [hov, setHov] = useState(false);
   return (
     <div className={`sc reveal d${delay}`} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
@@ -100,21 +122,21 @@ function ServiceCard({ s, img, delay, onBook }) {
         {img && <img src={img} alt={s.name} loading="lazy" />}
       </div>
       <div className="sc-img-overlay" style={{ opacity: hov ? 1 : 0 }} />
-      {s.popular && <div className="sc-badge">★ Signature</div>}
+      {s.popular && <div className="sc-badge">{t.cat_badge}</div>}
       <div className="sc-body">
         <div className="sc-top">
           <span className="sc-icon">{s.icon}</span>
-          <span className="sc-cat eyebrow">{s.category}</span>
+          <span className="sc-cat eyebrow">{t.categories[s.category] || s.category}</span>
         </div>
         <h3 className="sc-name">{s.name}</h3>
         <p className="sc-desc">{s.description}</p>
       </div>
       <div className="sc-footer">
         <div className="sc-meta">
-          <div><span className="sc-meta-label">Duration</span><span className="sc-meta-val">{s.duration}</span></div>
-          <div><span className="sc-meta-label">Price</span><span className="sc-meta-price">€{s.price}</span></div>
+          <div><span className="sc-meta-label">{t.cat_duration}</span><span className="sc-meta-val">{s.duration}</span></div>
+          <div><span className="sc-meta-label">{t.cat_price}</span><span className="sc-meta-price">€{s.price}</span></div>
         </div>
-        <button className="sc-book" onClick={onBook}>Book Now →</button>
+        <button className="sc-book" onClick={onBook}>{t.cat_book} →</button>
       </div>
     </div>
   );

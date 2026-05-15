@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export function useReveal(threshold = 0.12) {
+export function useReveal(threshold = 0.12, deps = []) {
   useEffect(() => {
     const selector = '.reveal, .reveal-left, .reveal-right, .reveal-scale';
     const elements = document.querySelectorAll(selector);
@@ -8,10 +8,8 @@ export function useReveal(threshold = 0.12) {
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // Element entered viewport → play animation
           entry.target.classList.add('visible');
         } else {
-          // Element left viewport → reset so it replays next time
           entry.target.classList.remove('visible');
         }
       });
@@ -19,5 +17,6 @@ export function useReveal(threshold = 0.12) {
 
     elements.forEach(el => obs.observe(el));
     return () => obs.disconnect();
-  }, [threshold]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [threshold, ...deps]);
 }

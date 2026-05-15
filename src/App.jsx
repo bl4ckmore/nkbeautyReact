@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { LanguageProvider } from './context/LanguageContext';
 import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -36,6 +37,7 @@ function NotFound() {
 
 export default function App() {
   return (
+    <LanguageProvider>
     <BrowserRouter>
       <ScrollToTop />
       <CustomCursor />
@@ -49,5 +51,6 @@ export default function App() {
         )}
       </Layout>
     </BrowserRouter>
+    </LanguageProvider>
   );
 }
