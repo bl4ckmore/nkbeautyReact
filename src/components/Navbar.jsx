@@ -26,7 +26,7 @@ export default function Navbar({ onBook }) {
         <div className="nav-inner container-wide">
           <Link to="/" className="nav-logo">
             <span className="nav-logo-mark">✦</span>
-            Lumière
+            NkBeauty
           </Link>
 
           <ul className="nav-links">
