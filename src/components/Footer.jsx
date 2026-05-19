@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom';
+import { useLang } from '../context/LanguageContext';
+import { T } from '../i18n/translations';
 import './Footer.css';
 
 export default function Footer() {
+  const { lang } = useLang();
+  const t = T[lang];
+
   return (
     <footer className="footer">
       <div className="footer-inner container-wide">
@@ -9,9 +14,9 @@ export default function Footer() {
           <div className="footer-brand">
             <div className="footer-logo">
               <span className="fl-mark">✦</span>
-              <span>Lumière</span>
+              <span>NkBeauty</span>
             </div>
-            <p>A sanctuary of artistry where every treatment is crafted with intention, expertise, and an unwavering commitment to your beauty.</p>
+            <p>{t.ft_desc}</p>
             <div className="footer-social">
               <a href="#">◈</a>
               <a href="#">◉</a>
@@ -21,15 +26,13 @@ export default function Footer() {
 
           <div className="footer-nav">
             <div className="fn-col">
-              <h5>Services</h5>
-              <Link to="/catalog">Hair Treatments</Link>
-              <Link to="/catalog">Nail Studio</Link>
-              <Link to="/catalog">Skin & Facials</Link>
-              <Link to="/catalog">Brows & Lashes</Link>
-              <Link to="/catalog">Body Rituals</Link>
+              <h5>{t.ft_services}</h5>
+              {t.ft_svc_links.map(l => (
+                <Link key={l} to="/catalog">{l}</Link>
+              ))}
             </div>
             <div className="fn-col">
-              <h5>Visit</h5>
+              <h5>{t.ft_visit}</h5>
               <span>14 Rustaveli Ave</span>
               <span>Tbilisi, Georgia</span>
               <span className="fn-sep" />
@@ -37,21 +40,21 @@ export default function Footer() {
               <span>Sunday 10–17</span>
             </div>
             <div className="fn-col">
-              <h5>Contact</h5>
+              <h5>{t.ft_contact}</h5>
               <a href="tel:+99532123456">+995 32 123 456</a>
-              <a href="mailto:hello@lumiere.ge">hello@lumiere.ge</a>
+              <a href="mailto:hello@nkbeauty.ge">hello@nkbeauty.ge</a>
               <span className="fn-sep" />
-              <Link to="/signin">Book Now</Link>
-              <Link to="/orders">My Orders</Link>
+              <Link to="/signin">{t.ft_book}</Link>
+              <Link to="/orders">{t.ft_orders}</Link>
             </div>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Lumière Beauty Maison</span>
+          <span>© {new Date().getFullYear()} {t.ft_copy}</span>
           <div className="fb-links">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
+            <a href="#">{t.ft_privacy}</a>
+            <a href="#">{t.ft_terms}</a>
           </div>
         </div>
       </div>

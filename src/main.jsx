@@ -4,9 +4,9 @@ import Lenis from 'lenis'
 import App from './App.jsx'
 import './index.css'
 
-// Smooth scroll
-const lenis = new Lenis({
-  duration: 1.4,
+// Single RAF loop — Lenis plugged in directly, no competing loops
+const lenis = window.lenis = new Lenis({
+  duration: 1.2,
   easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
   smoothWheel: true,
   touchMultiplier: 1.5,

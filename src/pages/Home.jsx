@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useReveal } from '../hooks/useReveal';
 import { SERVICES } from '../services/catalogData';
+import { useLang } from '../context/LanguageContext';
+import { T } from '../i18n/translations';
 import './Home.css';
 
-/* ─── featured 3 for editorial list ─── */
 const FEATURED = SERVICES.filter(s => s.popular);
 
 const IMAGES = {
@@ -24,57 +25,47 @@ const IMAGES = {
 const TICKER = ['Hair', 'Nails', 'Skin', 'Lashes', 'Brows', 'Massage', 'Balayage', 'Facials'];
 const doubled = [...TICKER, ...TICKER, ...TICKER];
 
-const STATS = [
-  { num: 1400, suffix: '+', label: 'Clients Served' },
-  { num: 8,    suffix: ' yrs', label: 'of Excellence' },
-  { num: 12,   suffix: '',     label: 'Expert Artists' },
-  { num: 97,   suffix: '%',    label: 'Satisfaction Rate' },
-];
+const STAT_NUMS = [1400, 8, 12, 97];
 
-/* ─── animated counter ─── */
 function Counter({ target, suffix }) {
   const [val, setVal] = useState(0);
   const ref = useRef(null);
   const rafRef = useRef(null);
 
+  const runCounter = (startFrom = 0) => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    const dur = 1800;
+    const start = performance.now();
+    const tick = (now) => {
+      const p = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      setVal(Math.round(startFrom + ease * (target - startFrom)));
+      if (p < 1) rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+  };
+
   useEffect(() => {
     const el = ref.current;
-
-    const runCounter = () => {
-      // Cancel any in-progress animation
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      const dur = 1800;
-      const start = performance.now();
-      const tick = (now) => {
-        const p = Math.min((now - start) / dur, 1);
-        const ease = 1 - Math.pow(1 - p, 3);
-        setVal(Math.round(ease * target));
-        if (p < 1) rafRef.current = requestAnimationFrame(tick);
-      };
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
     const obs = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         runCounter();
       } else {
-        // Reset to 0 when out of view so it counts up fresh next time
+        // reset when scrolled out so it replays on re-entry
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
         setVal(0);
       }
     }, { threshold: 0.5 });
-
     obs.observe(el);
     return () => { obs.disconnect(); if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [target]);
 
   return <span ref={ref}>{val}{suffix}</span>;
 }
 
-/* ─── editorial service row ─── */
 function ServiceRow({ s, img, index }) {
   const [hov, setHov] = useState(false);
-
   return (
     <div
       className={`svc-row reveal d${(index % 4) + 1}`}
@@ -89,7 +80,7 @@ function ServiceRow({ s, img, index }) {
           <span className="svc-row-cat">{s.category}</span>
           <h3 className={hov ? 'shifted' : ''}>{s.name}</h3>
         </div>
-        <p className="svc-row-desc" style={{ opacity: hov ? 1 : 0 }}>{s.desc}</p>
+        <p className="svc-row-desc" style={{ opacity: hov ? 1 : 0 }}>{s.description}</p>
         <span className="svc-row-price">€{s.price}</span>
         <span className="svc-row-arrow" style={{ opacity: hov ? 1 : 0, transform: hov ? 'translateX(0)' : 'translateX(-10px)' }}>→</span>
       </div>
@@ -98,10 +89,11 @@ function ServiceRow({ s, img, index }) {
 }
 
 export default function Home({ onBook }) {
-  useReveal(0.1);
+  const { lang } = useLang();
+  const t = T[lang];
+  useReveal(0.1, [lang]);
   const heroBgRef = useRef(null);
 
-  /* Parallax hero */
   useEffect(() => {
     const bg = heroBgRef.current;
     const onScroll = () => {
@@ -115,85 +107,68 @@ export default function Home({ onBook }) {
 
   return (
     <div className="home page">
-      {/* ══════ HERO ══════ */}
+      {/* HERO */}
       <section className="hero">
-        <div
-          ref={heroBgRef}
-          className="hero-bg"
-          style={{ backgroundImage: `url(${IMAGES.hero})` }}
-        />
+        <div ref={heroBgRef} className="hero-bg" style={{ backgroundImage: `url(${IMAGES.hero})` }} />
         <div className="hero-overlay" />
-
         <div className="hero-body container-wide">
           <div className="hero-label reveal">
             <span className="hero-line" />
-            <span className="eyebrow">Tbilisi's Premier Beauty Maison</span>
+            <span className="eyebrow">{t.hero_eyebrow}</span>
           </div>
-
           <h1 className="hero-title">
-            <span className="ht-line ht-1">The Art of</span>
-            <em className="ht-line ht-2">Radiance</em>
-            <span className="ht-line ht-3">Redefined.</span>
+            <span className="ht-line ht-1">{t.hero_line1}</span>
+            <em className="ht-line ht-2">{t.hero_line2}</em>
+            <span className="ht-line ht-3">{t.hero_line3}</span>
           </h1>
-
-          <p className="hero-sub reveal d3">
-            A sanctuary where expertise meets artistry — every appointment<br />
-            is a ritual crafted entirely for you.
-          </p>
-
+          <p className="hero-sub reveal d3">{t.hero_sub}</p>
           <div className="hero-actions reveal d4">
             <button className="btn btn-gold" onClick={() => onBook()}>
-              <span>Reserve Your Visit</span>
+              <span>{t.hero_reserve}</span>
               <span className="btn-arrow">→</span>
             </button>
             <Link to="/catalog" className="btn btn-outline">
-              <span>Explore Services</span>
+              <span>{t.hero_explore}</span>
             </Link>
           </div>
         </div>
-
-        <div className="hero-scroll-hint">
-          <div className="scroll-line" />
-          <span>Scroll</span>
-        </div>
       </section>
 
-      {/* ══════ TICKER ══════ */}
+      {/* TICKER */}
       <div className="ticker" aria-hidden="true">
         <div className="ticker-track">
-          {doubled.map((t, i) => (
-            <span key={i}>{t}<span className="tk-dot">✦</span></span>
+          {doubled.map((item, i) => (
+            <span key={i}>{item}<span className="tk-dot">✦</span></span>
           ))}
         </div>
       </div>
 
-      {/* ══════ ABOUT ══════ */}
+      {/* ABOUT */}
       <section className="about">
         <div className="container-wide">
           <div className="about-grid">
             <div className="about-visual reveal-left">
               <div className="about-img-wrap">
-                <img src={IMAGES.about} alt="Lumière salon interior" loading="lazy" />
+                <img src={IMAGES.about} alt="NkBeauty salon interior" loading="lazy" />
                 <div className="about-img-overlay" />
               </div>
               <div className="about-badge">
                 <span className="ab-num">4.9</span>
                 <span className="ab-stars">★★★★★</span>
-                <span className="ab-label">Client Rating</span>
+                <span className="ab-label">{t.about_rating}</span>
               </div>
             </div>
-
             <div className="about-text">
-              <p className="eyebrow reveal">Our Philosophy</p>
+              <p className="eyebrow reveal">{t.about_eyebrow}</p>
               <div className="rule reveal d1"><span className="rule-dot">✦</span></div>
               <h2 className="reveal d2">
-                Beauty is an art.<br />
-                <em>We are the artists.</em>
+                {t.about_h2a}<br />
+                <em>{t.about_h2b}</em>
               </h2>
-              <p className="reveal d3">At Lumière, treatments are more than services — they are rituals of self-care, moments of transformation. Our master artists bring years of expertise and a passion for craft to every appointment.</p>
-              <p className="reveal d4">Using only premium, ethically sourced products, we tailor each experience entirely to you — your features, your lifestyle, your vision.</p>
+              <p className="reveal d3">{t.about_p1}</p>
+              <p className="reveal d4">{t.about_p2}</p>
               <div className="about-checks reveal d5">
-                {['Premium Products Only', 'Certified Specialists', 'Personal Consultations', 'Guaranteed Hygiene'].map(f => (
+                {t.about_checks.map(f => (
                   <div key={f} className="ac-item">
                     <span className="ac-check">✓</span>
                     <span>{f}</span>
@@ -201,7 +176,7 @@ export default function Home({ onBook }) {
                 ))}
               </div>
               <Link to="/catalog" className="btn btn-gold reveal d6">
-                <span>View All Services</span>
+                <span>{t.about_cta}</span>
                 <span className="btn-arrow">→</span>
               </Link>
             </div>
@@ -209,14 +184,14 @@ export default function Home({ onBook }) {
         </div>
       </section>
 
-      {/* ══════ STATS ══════ */}
+      {/* STATS */}
       <section className="stats">
         <div className="container-wide">
           <div className="stats-grid">
-            {STATS.map((s, i) => (
-              <div key={s.label} className={`stat-item reveal d${i + 1}`}>
+            {t.stats.map((s, i) => (
+              <div key={`${lang}-${s.label}`} className={`stat-item reveal d${i + 1}`}>
                 <div className="stat-num">
-                  <Counter target={s.num} suffix={s.suffix} />
+                  <Counter target={STAT_NUMS[i]} suffix={s.suffix} />
                 </div>
                 <div className="stat-label">{s.label}</div>
               </div>
@@ -225,13 +200,13 @@ export default function Home({ onBook }) {
         </div>
       </section>
 
-      {/* ══════ EDITORIAL SERVICES ══════ */}
+      {/* EDITORIAL SERVICES */}
       <section className="svc-section">
         <div className="container-wide">
           <div className="svc-header">
-            <p className="eyebrow reveal">Signature Treatments</p>
+            <p className="eyebrow reveal">{t.svc_eyebrow}</p>
             <div className="rule reveal d1"><span className="rule-dot">✦</span></div>
-            <h2 className="reveal d2">What We <em>Do Best</em></h2>
+            <h2 className="reveal d2">{t.svc_h2a}<em>{t.svc_h2b}</em></h2>
           </div>
           <div className="svc-list">
             {FEATURED.map((s, i) => (
@@ -239,65 +214,63 @@ export default function Home({ onBook }) {
             ))}
           </div>
           <div className="svc-footer reveal">
-            <Link to="/catalog" className="btn btn-outline"><span>See All 12 Treatments</span></Link>
+            <Link to="/catalog" className="btn btn-outline"><span>{t.svc_all}</span></Link>
           </div>
         </div>
       </section>
 
-      {/* ══════ GALLERY ══════ */}
+      {/* GALLERY */}
       <section className="gallery-section">
         <div className="gallery-header container-wide">
-          <p className="eyebrow reveal">Visual Portfolio</p>
+          <p className="eyebrow reveal">{t.gal_eyebrow}</p>
           <div className="rule reveal d1"><span className="rule-dot">✦</span></div>
-          <h2 className="reveal d2">Moments of <em>Transformation</em></h2>
+          <h2 className="reveal d2">{t.gal_h2a}<em>{t.gal_h2b}</em></h2>
         </div>
         <div className="gallery-grid">
           <div className="gal-item tall reveal-scale d1">
             <img src={IMAGES.gallery1} alt="Hair color" loading="lazy" />
-            <div className="gal-overlay"><span>Hair Colour</span></div>
+            <div className="gal-overlay"><span>{t.gal_labels[0]}</span></div>
           </div>
           <div className="gal-item reveal-scale d2">
             <img src={IMAGES.gallery2} alt="Portrait" loading="lazy" />
-            <div className="gal-overlay"><span>Beauty Studio</span></div>
+            <div className="gal-overlay"><span>{t.gal_labels[1]}</span></div>
           </div>
           <div className="gal-item wide reveal-scale d3">
             <img src={IMAGES.gallery3} alt="Portrait" loading="lazy" />
-            <div className="gal-overlay"><span>Signature Look</span></div>
+            <div className="gal-overlay"><span>{t.gal_labels[2]}</span></div>
           </div>
           <div className="gal-item reveal-scale d4">
             <img src={IMAGES.gallery4} alt="Salon" loading="lazy" />
-            <div className="gal-overlay"><span>Our Studio</span></div>
+            <div className="gal-overlay"><span>{t.gal_labels[3]}</span></div>
           </div>
         </div>
       </section>
 
-      {/* ══════ TESTIMONIAL ══════ */}
+      {/* TESTIMONIAL */}
       <section className="quote-section">
         <div className="container">
           <div className="quote-inner reveal-scale">
             <div className="quote-mark">"</div>
-            <blockquote>
-              The team at Lumière don't just do your hair — they give you a whole new sense of self. The atmosphere, the precision, the care. There is nowhere else like it.
-            </blockquote>
+            <blockquote>{t.quote}</blockquote>
             <div className="quote-author">
               <div className="qa-line" />
               <span className="qa-name">Salome G.</span>
-              <span className="qa-role">Client since 2021</span>
+              <span className="qa-role">{t.quote_role}</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══════ CTA ══════ */}
+      {/* CTA */}
       <section className="cta-section">
         <div className="cta-bg" style={{ backgroundImage: `url(${IMAGES.cta})` }} />
         <div className="cta-overlay" />
         <div className="cta-body container">
-          <p className="eyebrow reveal">Begin Your Journey</p>
-          <h2 className="reveal d2">Ready to <em>Transform</em>?</h2>
-          <p className="reveal d3">Book your appointment and step into a world of refined beauty.</p>
+          <p className="eyebrow reveal">{t.cta_eyebrow}</p>
+          <h2 className="reveal d2">{t.cta_h2a}<em>{t.cta_h2b}</em>?</h2>
+          <p className="reveal d3">{t.cta_sub}</p>
           <button className="btn btn-gold reveal d4" onClick={() => onBook()}>
-            <span>Book Your Appointment</span>
+            <span>{t.cta_btn}</span>
             <span className="btn-arrow">→</span>
           </button>
         </div>

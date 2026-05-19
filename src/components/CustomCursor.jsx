@@ -7,14 +7,17 @@ export default function CustomCursor() {
   const dotRef  = useRef(null);
 
   useEffect(() => {
-    let gx = -200, gy = -200; // glow position (slowest)
-    let rx = -200, ry = -200; // ring position (medium)
-    let tx = -200, ty = -200; // target (mouse)
-    let raf;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    let gx = -200, gy = -200;
+    let rx = -200, ry = -200;
+    let tx = -200, ty = -200;
+    let moved = false;
+    let rafId;
 
     const lerp = (a, b, t) => a + (b - a) * t;
 
-    const onMove = (e) => { tx = e.clientX; ty = e.clientY; };
+    const onMove = (e) => { tx = e.clientX; ty = e.clientY; moved = true; };
 
     const onOver = (e) => {
       if (e.target.matches('a, button, [data-cursor], input, select, textarea')) {
@@ -32,10 +35,11 @@ export default function CustomCursor() {
     const onUp   = () => ringRef.current?.classList.remove('press');
 
     const tick = () => {
-      // Glow: very slow, heavy lag
+      rafId = requestAnimationFrame(tick);
+      if (!moved) return;
+
       gx = lerp(gx, tx, 0.06);
       gy = lerp(gy, ty, 0.06);
-      // Ring: medium lag
       rx = lerp(rx, tx, 0.14);
       ry = lerp(ry, ty, 0.14);
 
@@ -43,23 +47,27 @@ export default function CustomCursor() {
       if (ringRef.current) ringRef.current.style.transform = `translate(${rx - 16}px, ${ry - 16}px)`;
       if (dotRef.current)  dotRef.current.style.transform  = `translate(${tx - 2}px, ${ty - 2}px)`;
 
-      raf = requestAnimationFrame(tick);
+      const snap = 0.3;
+      if (Math.abs(gx - tx) < snap && Math.abs(gy - ty) < snap &&
+          Math.abs(rx - tx) < snap && Math.abs(ry - ty) < snap) {
+        moved = false;
+      }
     };
 
     window.addEventListener('mousemove', onMove, { passive: true });
-    window.addEventListener('mousedown', onDown);
-    window.addEventListener('mouseup',   onUp);
-    document.addEventListener('mouseover', onOver);
-    document.addEventListener('mouseout',  onOut);
-    raf = requestAnimationFrame(tick);
+    window.addEventListener('mousedown', onDown, { passive: true });
+    window.addEventListener('mouseup',   onUp,   { passive: true });
+    document.addEventListener('pointerover', onOver);
+    document.addEventListener('pointerout',  onOut);
+    rafId = requestAnimationFrame(tick);
 
     return () => {
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mousedown', onDown);
       window.removeEventListener('mouseup',   onUp);
-      document.removeEventListener('mouseover', onOver);
-      document.removeEventListener('mouseout',  onOut);
+      document.removeEventListener('pointerover', onOver);
+      document.removeEventListener('pointerout',  onOut);
     };
   }, []);
 

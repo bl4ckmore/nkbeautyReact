@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import CustomCursor from './components/CustomCursor';
+import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import BookingModal from './components/BookingModal';
 import Home from './pages/Home';
 import Catalog from './pages/Catalog';
+import CustomCursor from './components/CustomCursor';
 import ScrollToTop from './components/ScrollToTop';
 
 function Layout({ children }) {
@@ -36,6 +37,7 @@ function NotFound() {
 
 export default function App() {
   return (
+    <LanguageProvider>
     <BrowserRouter>
       <ScrollToTop />
       <CustomCursor />
@@ -49,5 +51,6 @@ export default function App() {
         )}
       </Layout>
     </BrowserRouter>
+    </LanguageProvider>
   );
 }

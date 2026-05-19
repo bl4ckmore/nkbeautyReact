@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { apiFetch } from '../services/api';
 import { getServices } from '../services/servicesService';
+import { useLang } from '../context/LanguageContext';
+import { T } from '../i18n/translations';
 import './BookingModal.css';
 
 const TIMES = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30',
@@ -15,6 +17,8 @@ export default function BookingModal({ preService, onClose }) {
   const [errs, setErrs]         = useState({});
   const [busy, setBusy]         = useState(false);
   const [success, setSuccess]   = useState(false);
+  const { lang } = useLang();
+  const t = T[lang];
 
   useEffect(() => {
     getServices().then(setServices).catch(() => {});
@@ -28,11 +32,11 @@ export default function BookingModal({ preService, onClose }) {
 
   const validate = () => {
     const e = {};
-    if (!form.name.trim())  e.name    = 'Required';
-    if (!form.phone.trim()) e.phone   = 'Required';
-    if (!form.service)      e.service = 'Required';
-    if (!form.date)         e.date    = 'Required';
-    if (!form.time)         e.time    = 'Required';
+    if (!form.name.trim())  e.name    = t.bm_required;
+    if (!form.phone.trim()) e.phone   = t.bm_required;
+    if (!form.service)      e.service = t.bm_required;
+    if (!form.date)         e.date    = t.bm_required;
+    if (!form.time)         e.time    = t.bm_required;
     return e;
   };
 
@@ -56,7 +60,7 @@ export default function BookingModal({ preService, onClose }) {
       });
       setSuccess(true);
     } catch (e) {
-      setErrs({ _: e.message || 'Something went wrong. Please try again.' });
+      setErrs({ _: e.message || t.bm_error });
     } finally {
       setBusy(false);
     }
@@ -70,37 +74,39 @@ export default function BookingModal({ preService, onClose }) {
         {success ? (
           <div className="bm-success">
             <span className="bm-success-icon">✦</span>
-            <h2>Booking Received!</h2>
-            <p>Thank you, <strong>{form.name}</strong>. We'll confirm your appointment shortly.</p>
-            <button className="btn btn-gold" onClick={onClose}><span>Close</span></button>
+            <h2>{t.bm_success_h}</h2>
+            <p>Thank you, <strong>{form.name}</strong>. {t.bm_success_p}</p>
+            <button className="btn btn-gold" onClick={onClose}><span>{t.bm_close}</span></button>
           </div>
         ) : (
           <>
             <div className="bm-header">
-              <h2>Book an Appointment</h2>
-              <p>Fill in your details and we'll confirm shortly.</p>
+              <h2>{t.bm_title}</h2>
+              <p>{t.bm_sub}</p>
             </div>
 
             <form onSubmit={submit} noValidate>
               <div className="bm-row">
                 <div className="field">
-                  <label>Full Name</label>
-                  <input name="name" type="text" placeholder="Salome Beridze" value={form.name} onChange={ch} />
+                  <label>{t.bm_name}</label>
+                  <input name="name" type="text" placeholder={t.bm_name_ph} value={form.name} onChange={ch} />
                   {errs.name && <span className="field-error">{errs.name}</span>}
                 </div>
                 <div className="field">
-                  <label>Phone Number</label>
-                  <input name="phone" type="tel" placeholder="+995 5XX XXX XXX" value={form.phone} onChange={ch} />
+                  <label>{t.bm_phone}</label>
+                  <input name="phone" type="tel" placeholder={t.bm_phone_ph} value={form.phone} onChange={ch} />
                   {errs.phone && <span className="field-error">{errs.phone}</span>}
                 </div>
               </div>
 
               <div className="field">
-                <label>Service</label>
+                <label>{t.bm_service}</label>
                 <select name="service" value={form.service} onChange={ch}>
-                  <option value="">Select a service…</option>
+                  <option value="">{t.bm_svc_ph}</option>
                   {services.map(s => (
-                    <option key={s.id} value={s.name}>{s.category} — {s.name} (€{s.price})</option>
+                    <option key={s.id} value={s.name}>
+                      {(t.categories[s.category] || s.category)} — {s.name} (€{s.price})
+                    </option>
                   ))}
                 </select>
                 {errs.service && <span className="field-error">{errs.service}</span>}
@@ -108,31 +114,31 @@ export default function BookingModal({ preService, onClose }) {
 
               <div className="bm-row">
                 <div className="field">
-                  <label>Date</label>
+                  <label>{t.bm_date}</label>
                   <input name="date" type="date" value={form.date} onChange={ch} min={new Date().toISOString().split('T')[0]} />
                   {errs.date && <span className="field-error">{errs.date}</span>}
                 </div>
                 <div className="field">
-                  <label>Time</label>
+                  <label>{t.bm_time}</label>
                   <select name="time" value={form.time} onChange={ch}>
-                    <option value="">Select time…</option>
-                    {TIMES.map(t => <option key={t} value={t}>{t}</option>)}
+                    <option value="">{t.bm_time_ph}</option>
+                    {TIMES.map(tm => <option key={tm} value={tm}>{tm}</option>)}
                   </select>
                   {errs.time && <span className="field-error">{errs.time}</span>}
                 </div>
               </div>
 
               <div className="field">
-                <label>Notes <span style={{ color:'var(--cream-dim)', fontWeight:400 }}>(optional)</span></label>
-                <textarea name="notes" rows={3} placeholder="Any special requests…" value={form.notes} onChange={ch} style={{ resize:'vertical' }} />
+                <label>{t.bm_notes} <span style={{ color:'var(--cream-dim)', fontWeight:400 }}>{t.bm_notes_opt}</span></label>
+                <textarea name="notes" rows={3} placeholder={t.bm_notes_ph} value={form.notes} onChange={ch} style={{ resize:'vertical' }} />
               </div>
 
               {errs._ && <p className="bm-error">⚠ {errs._}</p>}
 
               <div className="bm-footer">
-                <button type="button" className="btn btn-outline" onClick={onClose}><span>Cancel</span></button>
+                <button type="button" className="btn btn-outline" onClick={onClose}><span>{t.bm_cancel}</span></button>
                 <button type="submit" className="btn btn-gold" disabled={busy}>
-                  <span>{busy ? 'Booking…' : 'Book Appointment'}</span>
+                  <span>{busy ? t.bm_busy : t.bm_submit}</span>
                   {!busy && <span>→</span>}
                 </button>
               </div>

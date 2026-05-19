@@ -9,14 +9,20 @@ export function useReveal(threshold = 0.12, deps = []) {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-        } else {
-          entry.target.classList.remove('visible');
+          obs.unobserve(entry.target);
         }
       });
     }, { threshold });
 
-    elements.forEach(el => obs.observe(el));
-    return () => obs.disconnect();
+    // Small delay so React has finished painting remounted DOM nodes
+    const timer = setTimeout(() => {
+      document.querySelectorAll(selector).forEach(el => obs.observe(el));
+    }, 30);
+
+    return () => {
+      clearTimeout(timer);
+      obs.disconnect();
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [threshold, ...deps]);
 }

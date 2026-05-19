@@ -79,6 +79,53 @@
   gap: 1.25rem;
 }
 
+.lang-pill {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  transition: border-color 0.25s;
+}
+
+.lang-pill:hover { border-color: var(--gold-dim); }
+
+.lang-pill span { color: var(--cream-dim); transition: color 0.2s; }
+.lang-pill .lp-active { color: var(--gold); }
+.lang-pill .lp-sep {
+  color: var(--border);
+  margin: 0 0.4rem;
+  font-weight: 300;
+}
+
+/* Mobile book button — gold accent */
+.nm-book {
+  color: var(--gold) !important;
+  border-bottom-color: var(--gold-dim) !important;
+  font-weight: 600 !important;
+}
+.nm-book:hover {
+  color: var(--gold-light) !important;
+  padding-left: 0.5rem;
+}
+
+/* Mobile lang row */
+.nm-lang {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.nm-lang .lang-pill {
+  font-size: 0.65rem;
+  padding: 0.45rem 1rem;
+}
+
 .nav-user {
   display: flex;
   align-items: center;
