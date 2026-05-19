@@ -31,7 +31,7 @@ export default function Navbar({ onBook }) {
         <div className="nav-inner container-wide">
           <Link to="/" className="nav-logo">
             <img src={nkLogo} alt="NK" className="nav-logo-img" />
-            NkBeauty
+          BEAUTY
           </Link>
 
           <ul className="nav-links">
@@ -61,7 +61,7 @@ export default function Navbar({ onBook }) {
 
       <div className={`nav-mobile ${open ? 'open' : ''}`}>
         <div className="nm-top">
-          <span className="nav-logo"><img src={nkLogo} alt="NK" className="nav-logo-img" /> NkBeauty</span>
+          <span className="nav-logo"><img src={nkLogo} alt="NK" className="nav-logo-img" />BEAUTY</span>
           <button className="nm-close" onClick={() => setOpen(false)}>✕</button>
         </div>
         <nav className="nm-links">
