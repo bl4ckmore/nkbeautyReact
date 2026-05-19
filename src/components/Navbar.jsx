@@ -31,7 +31,7 @@ export default function Navbar({ onBook }) {
         <div className="nav-inner container-wide">
           <Link to="/" className="nav-logo">
             <img src={nkLogo} alt="NK" className="nav-logo-img" />
-          BEAUTY
+            BEAUTY
           </Link>
 
           <ul className="nav-links">
@@ -61,12 +61,11 @@ export default function Navbar({ onBook }) {
 
       <div className={`nav-mobile ${open ? 'open' : ''}`}>
         <div className="nm-top">
-          <span className="nav-logo"><img src={nkLogo} alt="NK" className="nav-logo-img" />BEAUTY</span>
+          <span className="nav-logo"><img src={nkLogo} alt="NK" className="nav-logo-img" /> BEAUTY</span>
           <button className="nm-close" onClick={() => setOpen(false)}>✕</button>
         </div>
         <nav className="nm-links">
           {links.map(l => <Link key={l.to} to={l.to}>{l.label}</Link>)}
-          <button className="nm-book" onClick={() => { setOpen(false); onBook(); }}>{t.nav_book}</button>
           <div className="nm-lang">
             <button className="lang-pill" onClick={toggle} aria-label="Switch language">
               <span className={lang === 'en' ? 'lp-active' : ''}>EN</span>

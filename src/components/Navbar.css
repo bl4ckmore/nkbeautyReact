@@ -243,7 +243,16 @@
   z-index: 590;
 }
 
+
+
 @media (max-width: 960px) {
-  .nav-links, .nav-right { display: none; }
+  .nav-links { display: none; }
   .nav-burger { display: flex; }
+  .nav-right .lang-pill { display: none; }
+  .nav-right .btn span { font-size: 1rem; }
+  /* Smaller logo on mobile */
+  .nav-logo-img { height: 44px; }
+  .nav-logo { font-size: 1.1rem; }
+  /* Compact nav-right on mobile */
+  .nav-right .btn { padding: 0.5rem 0.9rem; font-size: 0.58rem; letter-spacing: 0.12em; }
 }
