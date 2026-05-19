@@ -35,6 +35,16 @@
 
 .nav-logo:hover { opacity: 0.75; }
 
+.nav-logo-img {
+  height: 72px;
+  width: auto;
+  display: block;
+  filter: invert(1) brightness(0.75);
+  transition: filter 0.3s;
+}
+
+.nav-logo:hover .nav-logo-img { filter: invert(1) brightness(1); }
+
 .nav-logo-mark {
   color: var(--gold);
   font-size: 1rem;

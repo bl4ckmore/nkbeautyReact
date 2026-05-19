@@ -38,6 +38,9 @@ export const T = {
     svc_h2b:      'Do Best',
     svc_all:      'See All 12 Treatments',
 
+    // Ticker
+    ticker: ['Hair', 'Nails', 'Skin', 'Lashes', 'Brows', 'Massage', 'Balayage', 'Facials'],
+
     // Gallery
     gal_eyebrow:  'Visual Portfolio',
     gal_h2a:      'Moments of ',
@@ -153,6 +156,9 @@ export const T = {
     svc_h2a:      'ჩვენი ',
     svc_h2b:      'სპეციალობა',
     svc_all:      'ყველა 12 პროცედურის ნახვა',
+
+    // Ticker
+    ticker: ['თმა', 'ფრჩხილები', 'კანი', 'წამწამები', 'წარბები', 'მასაჟი', 'ბალაიაჟი', 'ფეისიალი'],
 
     // Gallery
     gal_eyebrow:  'ვიზუალური პორტფოლიო',

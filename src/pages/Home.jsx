@@ -22,9 +22,6 @@ const IMAGES = {
   cta:     'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1920&q=80',
 };
 
-const TICKER = ['Hair', 'Nails', 'Skin', 'Lashes', 'Brows', 'Massage', 'Balayage', 'Facials'];
-const doubled = [...TICKER, ...TICKER, ...TICKER];
-
 const STAT_NUMS = [1400, 8, 12, 97];
 
 function Counter({ target, suffix }) {
@@ -32,33 +29,26 @@ function Counter({ target, suffix }) {
   const ref = useRef(null);
   const rafRef = useRef(null);
 
-  const runCounter = (startFrom = 0) => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    const dur = 1800;
-    const start = performance.now();
-    const tick = (now) => {
-      const p = Math.min((now - start) / dur, 1);
-      const ease = 1 - Math.pow(1 - p, 3);
-      setVal(Math.round(startFrom + ease * (target - startFrom)));
-      if (p < 1) rafRef.current = requestAnimationFrame(tick);
-    };
-    rafRef.current = requestAnimationFrame(tick);
-  };
-
   useEffect(() => {
     const el = ref.current;
+    const runCounter = () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      const dur = 1800;
+      const start = performance.now();
+      const tick = (now) => {
+        const p = Math.min((now - start) / dur, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        setVal(Math.round(ease * target));
+        if (p < 1) rafRef.current = requestAnimationFrame(tick);
+      };
+      rafRef.current = requestAnimationFrame(tick);
+    };
     const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        runCounter();
-      } else {
-        // reset when scrolled out so it replays on re-entry
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
-        setVal(0);
-      }
-    }, { threshold: 0.5 });
+      if (entry.isIntersecting) { runCounter(); }
+      else { if (rafRef.current) cancelAnimationFrame(rafRef.current); setVal(0); }
+    }, { threshold: 0 });
     obs.observe(el);
     return () => { obs.disconnect(); if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [target]);
 
   return <span ref={ref}>{val}{suffix}</span>;
@@ -91,7 +81,7 @@ function ServiceRow({ s, img, index }) {
 export default function Home({ onBook }) {
   const { lang } = useLang();
   const t = T[lang];
-  useReveal(0.1, [lang]);
+  useReveal(0.1);
   const heroBgRef = useRef(null);
 
   useEffect(() => {
@@ -137,7 +127,7 @@ export default function Home({ onBook }) {
       {/* TICKER */}
       <div className="ticker" aria-hidden="true">
         <div className="ticker-track">
-          {doubled.map((item, i) => (
+          {[...t.ticker, ...t.ticker, ...t.ticker].map((item, i) => (
             <span key={i}>{item}<span className="tk-dot">✦</span></span>
           ))}
         </div>
@@ -189,7 +179,7 @@ export default function Home({ onBook }) {
         <div className="container-wide">
           <div className="stats-grid">
             {t.stats.map((s, i) => (
-              <div key={`${lang}-${s.label}`} className={`stat-item reveal d${i + 1}`}>
+              <div key={`${lang}-${s.label}`} className={`stat-item d${i + 1}`}>
                 <div className="stat-num">
                   <Counter target={STAT_NUMS[i]} suffix={s.suffix} />
                 </div>

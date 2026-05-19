@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useLang } from '../context/LanguageContext';
 import { T } from '../i18n/translations';
 import './Navbar.css';
+import nkLogo from '../assets/images/nk.png';
 
 export default function Navbar({ onBook }) {
   const [scrolled, setScrolled] = useState(false);
@@ -29,7 +30,7 @@ export default function Navbar({ onBook }) {
       <nav className={`nav ${scrolled ? 'nav--solid' : ''}`}>
         <div className="nav-inner container-wide">
           <Link to="/" className="nav-logo">
-            <span className="nav-logo-mark">✦</span>
+            <img src={nkLogo} alt="NK" className="nav-logo-img" />
             NkBeauty
           </Link>
 
@@ -60,7 +61,7 @@ export default function Navbar({ onBook }) {
 
       <div className={`nav-mobile ${open ? 'open' : ''}`}>
         <div className="nm-top">
-          <span className="nav-logo">✦ NkBeauty</span>
+          <span className="nav-logo"><img src={nkLogo} alt="NK" className="nav-logo-img" /> NkBeauty</span>
           <button className="nm-close" onClick={() => setOpen(false)}>✕</button>
         </div>
         <nav className="nm-links">
